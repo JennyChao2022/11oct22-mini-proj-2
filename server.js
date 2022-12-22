@@ -63,6 +63,10 @@ function stringContainsSpecialCharacters(str) { // From https://bobbyhadz.com/bl
   return specialChars.test(str);
 }
 
+function hasNumber(myString) { // From https://stackoverflow.com/a/28813213
+    return /\d/.test(myString);
+}
+
 app.post('/', (req, res) => {
     const username = req?.body?.username
     const password = req?.body?.password
@@ -103,8 +107,12 @@ app.post('/', (req, res) => {
         return res.status(400).send('The password does not start with a letter. Your form should prevent passwords that do not start with a letter from being submitted.')
     }
 
-    if (!stringContainsSpecialCharacter(password)) {
+    if (!stringContainsSpecialCharacters(password)) {
         return res.status(400).send('The password does not have a special character in it. Your form should prevent passwords that do not have a special character from being submitted.')
+    }
+
+    if (!hasNumber(password)) {
+        return res.status(400).send('The password does not have a number in it. Your form should prevent passwords that do not have a number in them from being submitted.')
     }
 
     const userIndex = logins.findIndex(login => login.username == username)
