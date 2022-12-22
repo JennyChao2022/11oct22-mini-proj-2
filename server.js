@@ -58,6 +58,11 @@ function stringStartsWithLetter(str) {
     else return false;
 }
 
+function stringContainsSpecialCharacters(str) { // From https://bobbyhadz.com/blog/javascript-check-if-string-contains-special-characters
+  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  return specialChars.test(str);
+}
+
 app.post('/', (req, res) => {
     const username = req?.body?.username
     const password = req?.body?.password
@@ -96,6 +101,10 @@ app.post('/', (req, res) => {
 
     if (!stringStartsWithLetter(password)) {
         return res.status(400).send('The password does not start with a letter. Your form should prevent passwords that do not start with a letter from being submitted.')
+    }
+
+    if (!stringContainsSpecialCharacter(password)) {
+        return res.status(400).send('The password does not have a special character in it. Your form should prevent passwords that do not have a special character from being submitted.')
     }
 
     const userIndex = logins.findIndex(login => login.username == username)
